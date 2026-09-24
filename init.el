@@ -169,6 +169,7 @@
 
 ;; Movement
 (general-define-key
+ "M-<return>" 'xref-find-definitions
  "M-<up>" 'windmove-up
  "M-<right>" 'windmove-right
  "M-<down>" 'windmove-down
@@ -235,14 +236,8 @@
                           (lsp))))  ; or lsp-deferred
 
 ;; PHP
-(use-package web-mode
-  :mode "\\.php\\'"
-  :config
-  ;; (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-enable-auto-quoting nil)
-  (setq web-mode-enable-auto-closing nil)
-  (setq web-mode-enable-auto-opening nil)
-  (setq web-mode-enable-auto-pairing nil))
+(use-package php-mode
+  :mode "\\.php\\'")
 
 ;; Kotlin
 (use-package kotlin-mode
