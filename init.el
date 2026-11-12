@@ -95,6 +95,7 @@
          ("C-d" . ivy-reverse-i-search-kill))
   :config
   (ivy-mode 1))
+
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
 	 ("C-x b" . counsel-ibuffer)
@@ -181,33 +182,22 @@
  "C-a" 'mark-whole-buffer)
 
 
-(use-package org
-  :config
-  (setq org-ellipsis " ▾"))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-
 ;; LSP mode
 
-(defun frexom/lsp-mode-setup()
-  (setq lsp-headerline-breadcrumb-segments '(path-to-up-project symbols))
+(defun liivide/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project symbols))
   (lsp-headerline-breadcrumb-mode))
 
 (use-package yasnippet)
 (yas-global-mode)
 
 (use-package lsp-mode
-  :commands (lsp lsp-deffered)
+  :commands (lsp lsp-deferred)
+  :hook (lsp-mode . liivide/lsp-mode-setup)
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (lsp-enable-which-key-integration t)
-  :hook (lsp-mode . frexom/lsp-mode-setup))
+  (lsp-enable-which-key-integration t))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode))
@@ -223,17 +213,13 @@
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
 
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred))
 
-;; Python
-(use-package lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+;; LANGUAGES
+
+(use-package typescript-mode
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  :hook (typescript-mode . lsp-deferred))
+(setq lsp-eslint-server-command '("vscode-eslint-language-server" "--stdio"))
 
 ;; PHP
 (use-package php-mode
@@ -245,14 +231,13 @@
   :config
   (setq-default kotlin-tab-width 2))
 
-
-
 ;; HTML
 (setq sgml-basic-offset 2)
 (setq css-indent-offset 2)
 
 ;; YAML
 (use-package yaml-mode)
+
 
 ;; Move auto save files away
 (setq backup-directory-alist
